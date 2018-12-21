@@ -16,17 +16,16 @@ const view   = require('lib/eden/view');
  * Create Email Helper class
  */
 class EmailHelper extends Helper {
-
   /**
    * Construct Email Helper class
    */
-  constructor () {
+  constructor() {
     // Run super
     super();
 
     // Build mailer
     this.mailer = nodemailer.createTransport(config.get('email'), {
-      'from' : config.get('email.from') || config.get('email.auth.user')
+      from : config.get('email.from') || config.get('email.auth.user'),
     });
   }
 
@@ -41,18 +40,18 @@ class EmailHelper extends Helper {
    *
    * @async
    */
-  async send (addresses, template, data) {
+  async send(addresses, template, data) {
     // Make sure addresses is array
     if (!Array.isArray(addresses)) addresses = [addresses];
 
     // Create text
     const email = new Email({
-      'data'     : data,
-      'from'     : data.from || config.get('email.from') || config.get('email.auth.user'),
-      'sent'     : false,
-      'emails'   : addresses,
-      'subject'  : data.subject || 'No Subject',
-      'template' : template
+      data,
+      from     : data.from || config.get('email.from') || config.get('email.auth.user'),
+      sent     : false,
+      emails   : addresses,
+      subject  : data.subject || 'No Subject',
+      template,
     });
 
     // Save text
@@ -69,7 +68,7 @@ class EmailHelper extends Helper {
     html += '<meta name="viewport" content="width=device-width">';
     html += '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
     html += '<meta name="x-apple-disable-message-reformatting">';
-    html += '<title>' + config.get('title') + ' - ' + email.get('subject') + '</title>';
+    html += `<title>${config.get('title')} - ${email.get('subject')}</title>`;
     html += '</head>';
     html += '<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">';
 
@@ -82,13 +81,13 @@ class EmailHelper extends Helper {
 
     // Options
     const options = {
-      'to'   : email.get('emails').join(', '),
-      'from' : email.get('from'),
-      'html' : html,
-      'text' : data.text || htmlToText.fromString(html, {
-        'wordwrap' : 130
+      to   : email.get('emails').join(', '),
+      from : email.get('from'),
+      html,
+      text : data.text || htmlToText.fromString(html, {
+        wordwrap : 130,
       }),
-      'subject' : data.subject
+      subject : data.subject,
     };
 
     // Loop data
@@ -99,8 +98,8 @@ class EmailHelper extends Helper {
 
     // Run email send hook
     await this.eden.hook('email.send', {
-      'email'   : email,
-      'options' : options
+      email,
+      options,
     });
 
     // Run try/catch
@@ -118,7 +117,7 @@ class EmailHelper extends Helper {
       });
 
       // Set sent
-      email.set('sent',    true);
+      email.set('sent', true);
       email.set('success', info.messageId);
 
       // Save email
@@ -137,7 +136,6 @@ class EmailHelper extends Helper {
     // Return email
     return email;
   }
-
 }
 
 /**

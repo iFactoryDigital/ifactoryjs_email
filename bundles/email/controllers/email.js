@@ -11,14 +11,12 @@ const Controller = require('controller');
  * @priority 90
  */
 class EmailController extends Controller {
-
   /**
    * Construct Email controller class
    */
-  constructor () {
+  constructor() {
     // Run super eden
     super();
-
   }
 }
 
