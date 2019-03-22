@@ -1,8 +1,11 @@
 {
   "name": "@edenjs/email",
   "description": "nothing yet",
-  "version": "1.0.2",
-  "dependencies": {},
+  "version": "1.0.3",
+  "dependencies": {
+    "html-to-text": "^4.0.0",
+    "nodemailer": "^5.1.1"
+  },
   "engines": {
     "node": ">= 8.0.0"
   },
