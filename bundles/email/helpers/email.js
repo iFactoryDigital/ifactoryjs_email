@@ -1,4 +1,5 @@
 // Require dependencies
+const uuid       = require('uuid');
 const nodemailer = require('nodemailer');
 const htmlToText = require('html-to-text');
 
@@ -46,15 +47,27 @@ class EmailHelper extends Helper {
     // Make sure addresses is array
     if (!Array.isArray(addresses)) addresses = [addresses];
 
+    // to delete
+    const toDelete = [];
+
     // check attachments
     if (data.attachments) {
       // do attachments
       data.attachments = await Promise.all(data.attachments.map(async (attachment) => {
         // get attachment
         if (attachment instanceof File || attachment instanceof Image) {
+          // Set local cache
+          const local = `${global.appRoot}/data/cache/tmp/${uuid()}`;
+
+          // push to delete
+          toDelete.push(local);
+
+          // get location
+          await this.eden.register('asset.transport').pull(attachment, local);
+
           // return attachment
           return {
-            path     : `https://localhost:${config.get('port')}${await attachment.url()}`,
+            path     : local,
             filename : attachment.get('name'),
           };
         }
@@ -73,8 +86,6 @@ class EmailHelper extends Helper {
       subject  : data.subject || 'No Subject',
       template,
     });
-
-    console.log(email.get());
 
     // Save text
     await email.save();
@@ -137,6 +148,15 @@ class EmailHelper extends Helper {
           resolve(info);
         });
       });
+
+      // check delete length
+      if (toDelete.length) {
+        // to delete
+        toDelete.forEach((item) => {
+          // unlink local item
+          fs.unlink(item);
+        });
+      }
 
       // Set sent
       email.set('sent', true);
