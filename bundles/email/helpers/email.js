@@ -1,4 +1,5 @@
 // Require dependencies
+const fs         = require('fs');
 const uuid       = require('uuid');
 const nodemailer = require('nodemailer');
 const htmlToText = require('html-to-text');
