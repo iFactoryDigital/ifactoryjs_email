@@ -6,7 +6,9 @@ const htmlToText = require('html-to-text');
 const Helper = require('helper');
 
 // Require models
+const File  = model('file');
 const Email = model('email');
+const Image = model('image');
 
 // Require local dependencies
 const config = require('config');
@@ -44,6 +46,24 @@ class EmailHelper extends Helper {
     // Make sure addresses is array
     if (!Array.isArray(addresses)) addresses = [addresses];
 
+    // check attachments
+    if (data.attachments) {
+      // do attachments
+      data.attachments = await Promise.all(data.attachments.map(async (attachment) => {
+        // get attachment
+        if (attachment instanceof File || attachment instanceof Image) {
+          // return attachment
+          return {
+            path     : `https://localhost:${config.get('port')}${await attachment.url()}`,
+            filename : attachment.get('name'),
+          };
+        }
+
+        // return attachment
+        return attachment;
+      }));
+    }
+
     // Create text
     const email = new Email({
       data,
@@ -53,6 +73,8 @@ class EmailHelper extends Helper {
       subject  : data.subject || 'No Subject',
       template,
     });
+
+    console.log(email.get());
 
     // Save text
     await email.save();
@@ -94,24 +116,6 @@ class EmailHelper extends Helper {
     for (const key in data) {
       // Check key doesnt exist
       if (!options[key]) options[key] = data[key];
-    }
-
-    // check attachments
-    if (data.attachments) {
-      // do attachments
-      options.attachments = await Promise.all(options.attachments.map(async (attachment) => {
-        // get attachment
-        if (attachment instanceof File || attachment instanceof Image) {
-          // return attachment
-          return {
-            path     : await attachment.url(),
-            filename : attachment.get('name'),
-          };
-        }
-
-        // return attachment
-        return attachment;
-      }));
     }
 
     // Run email send hook
