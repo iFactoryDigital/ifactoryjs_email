@@ -96,6 +96,24 @@ class EmailHelper extends Helper {
       if (!options[key]) options[key] = data[key];
     }
 
+    // check attachments
+    if (data.attachments) {
+      // do attachments
+      options.attachments = await Promise.all(options.attachments.map(async (attachment) => {
+        // get attachment
+        if (attachment instanceof File || attachment instanceof Image) {
+          // return attachment
+          return {
+            path     : await attachment.url(),
+            filename : attachment.get('name'),
+          };
+        }
+
+        // return attachment
+        return attachment;
+      }));
+    }
+
     // Run email send hook
     await this.eden.hook('email.send', {
       email,
