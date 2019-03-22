@@ -1,7 +1,7 @@
 {
   "name": "@edenjs/email",
   "description": "nothing yet",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "dependencies": {
     "html-to-text": "^4.0.0",
     "nodemailer": "^5.1.1"
