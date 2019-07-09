@@ -125,10 +125,10 @@ class EmailHelper extends Helper {
     };
 
     // Loop data
-    for (const key in data) {
+    Object.keys(data).forEach((key) => {
       // Check key doesnt exist
       if (!options[key]) options[key] = data[key];
-    }
+    });
 
     // Run email send hook
     await this.eden.hook('email.send', {
@@ -141,12 +141,12 @@ class EmailHelper extends Helper {
       // Send mail with defined transport object
       const info = await new Promise((resolve, reject) => {
         // Send mail
-        this.mailer.sendMail(options, (err, info) => {
+        this.mailer.sendMail(options, (err) => {
           // Check error
           if (err) return reject(err);
 
           // Resolve
-          resolve(info);
+          return resolve(info);
         });
       });
 
@@ -186,4 +186,4 @@ class EmailHelper extends Helper {
  *
  * @return {EmailHelper}
  */
-exports = module.exports = new EmailHelper();
+module.exports = new EmailHelper();

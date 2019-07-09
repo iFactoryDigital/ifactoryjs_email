@@ -5,13 +5,6 @@ const Model = require('model');
  * Create Email Model class
  */
 class Email extends Model {
-  /**
-   * Construct Email Model class
-   */
-  constructor() {
-    // Run super
-    super(...arguments);
-  }
 }
 
 /**
@@ -19,4 +12,4 @@ class Email extends Model {
  *
  * @type {Email}
  */
-exports = module.exports = Email;
+module.exports = Email;
