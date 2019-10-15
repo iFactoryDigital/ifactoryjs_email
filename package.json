@@ -1,5 +1,5 @@
 {
-  "name": "@edenjs/email",
+  "name": "@ifactoryjs/email",
   "description": "nothing yet",
   "version": "1.1.2",
   "dependencies": {
