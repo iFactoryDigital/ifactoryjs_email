@@ -64,7 +64,8 @@ class EmailHelper extends Helper {
           toDelete.push(local);
 
           // get location
-          await this.eden.register('asset.transport').pull(attachment, local);
+          //await this.eden.register('asset.transport').pull(attachment, local);
+          await this.eden.register('asset.transport.local').pull(attachment, local);
 
           // return attachment
           return {
