@@ -142,7 +142,7 @@ class EmailHelper extends Helper {
       // Send mail with defined transport object
       const info = await new Promise((resolve, reject) => {
         // Send mail
-        this.mailer.sendMail(options, (err) => {
+        this.mailer.sendMail(options, (err, info) => {
           // Check error
           if (err) return reject(err);
 
