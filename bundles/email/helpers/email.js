@@ -156,7 +156,7 @@ class EmailHelper extends Helper {
         // to delete
         toDelete.forEach((item) => {
           // unlink local item
-          fs.unlink(item);
+          fs.unlink(item, () => {console.log("Reg failed")});
         });
       }
 
