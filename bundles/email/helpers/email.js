@@ -136,9 +136,9 @@ class EmailHelper extends Helper {
       email,
       options,
     });
-
+    console.log('======================');
     // Run try/catch
-    try {
+    //try {
       // Send mail with defined transport object
       const info = await new Promise((resolve, reject) => {
         // Send mail
@@ -166,6 +166,7 @@ class EmailHelper extends Helper {
 
       // Save email
       await email.save();
+    /*
     } catch (e) {
       // Log error
       this.logger.log('error', e.toString());
@@ -176,7 +177,7 @@ class EmailHelper extends Helper {
       // Save email
       await email.save();
     }
-
+    */
     // Return email
     return email;
   }
