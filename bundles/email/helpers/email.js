@@ -1,5 +1,6 @@
 // Require dependencies
 const fs         = require('fs');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const uuid       = require('uuid');
 const nodemailer = require('nodemailer');
 const htmlToText = require('html-to-text');
@@ -24,13 +25,25 @@ class EmailHelper extends Helper {
    * Construct Email Helper class
    */
   constructor() {
-    // Run super
+
     super();
 
     // Build mailer
-    this.mailer = nodemailer.createTransport(config.get('email'), {
-      from : config.get('email.from') || config.get('email.auth.user'),
-    });
+    // this.mailer = nodemailer.createTransport(config.get('email'), {
+    //   from : config.get('email.from') || config.get('email.auth.user'),
+    // });
+
+    const configMail = config.get('email');
+
+    if (!configMail.from && configMail.auth && configMail.auth.user) {
+      configMail.from = configMail.auth.user;
+    }
+
+    if (configMail.auth === false) {
+      delete configMail.auth;
+    }
+
+    this.mailer = nodemailer.createTransport(configMail);
   }
 
   /**
